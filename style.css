@@ -1,0 +1,190 @@
+/*---------IMPORT FONTS-------*/
+/* @font-face{
+    font-family: 'LocalHero';
+    src: url('Hero.otf') 
+}
+
+@font-face{
+    font-family: 'LocalHeroLight';
+    src: url('Hero\ Light.otf') 
+} */
+
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'); */
+
+/*----------BODY---------*/
+
+html{
+    background-color: #182230;
+}
+body {
+    display:flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 800px;
+    min-height: 100vh; /*essential to make page large*/
+}
+
+ul{
+    margin: 5px 0px;
+    font-weight: bold;
+}
+
+/*-------HEADER SECTION---------*/
+.header{
+    display:flex;
+    background-color: #1F2937;
+    height: 70px;
+    justify-content:space-between;
+    align-items:center;
+    padding: 0px 100px;
+    max-width: 100%;
+    border-bottom: 5px solid rgb(145, 145, 145);
+    /* border: 2px solid rgb(51, 179, 0); */
+}
+
+/*-------MAIN SECTION---------*/
+.main{
+    flex: 1;
+    display:flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    /* border: 2px solid rgb(0, 255, 234); */
+}
+
+.left, .right {
+    flex: 1 1 0;
+    background-color: rgb(33, 33, 56)
+}
+
+.mid {
+    /* flex: 1; */
+    display:flex;
+    flex-direction: column;
+    flex: 4 1 0;
+    /* border: 2px solid rgb(255, 38, 0); */
+    padding: 200px 50px;
+    justify-content: center;
+    align-items:center;
+}
+
+.calcbox {
+    /* flex: 1;*/
+    display:flex; 
+    flex-direction: column;
+    background-color: black;
+    border: 5px solid rgb(54, 54, 54);
+    height: 500px;
+    width: 420px;
+}
+
+button {
+    display:flex;
+    flex: 1 1 0;
+    border-radius: 5px;
+    /* margin: 1px; */
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+    /* border: 2px solid rgb(255, 0, 0); */
+    /* border: .4rem solid black;
+    border-radius: .5rem;
+    margin: 1rem;
+    font-size: 1.5rem;
+    padding: 1rem .5rem;
+    transition: all .07s ease;
+    width: 10rem;
+    height: 8rem;
+    text-align: center;
+    color: white;
+    background: rgba(0,0,0,0.4);
+    text-shadow: 0 0 .5rem black; */
+  }
+
+[class*="row"] {
+    flex: 1 1 0;
+    display:flex;
+    flex-direction: row;
+    /* border: 2px solid rgb(255, 0, 0); */
+    border-radius: 5px;
+    /* margin: 2px; */
+
+}
+
+/* [class*="but"] {
+    display:flex;
+    flex: 1 1 0;
+    border: 2px solid rgb(255, 0, 242);
+    border-radius: 5px;
+    margin: 2px;
+    align-items: center;
+    justify-content: center;
+} */
+
+[class*="displayrow"] {
+    border-radius: 5px;
+    margin: 2px;
+    padding: 10px;
+    background-color: rgb(179, 179, 179);
+    align-items: center;
+    justify-content: right;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+[class*="op"] {
+    background-color: rgb(209, 170, 97);
+}
+
+[class*="num"] {
+    background-color: rgb(0, 175, 108);
+}
+
+[class*="trans"] {
+    background-color: rgb(0, 183, 255);
+}
+
+[class*="bot1"] {
+    /* display:flex; */
+    /* margin-left: 4px;
+    margin-right: 4px; */
+    /* padding-right: 20px; */
+    /*padding-left: 4px; */
+    flex-grow: 2;
+}
+
+[class*="bot2"]  {
+    /* display:flex; */
+    flex-grow: 1;
+    /* margin: 2px 2px; */
+}
+
+[class*="bot3"]  {
+    /* display:flex; */
+    flex-grow: 1;
+    /* margin: 2px 2px; */
+}
+
+[class*="playing"] {
+    transform: scale(1.05);
+    border: .2rem solid #a5a5a5;;
+    border-radius: .2rem;
+    box-shadow: 0 0 1rem #f1e6be;
+    font-weight: bold;
+    color: #464646;
+  }
+
+
+/*-------FOOTER SECTION---------*/
+.footer{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height: 50px;
+    padding: 0px 100px;
+    background-color: #1F2937;
+    color:white;
+    font-size: 14px;
+    font-weight:bold;
+    font-family: 'LocalHeroLight', Fallback, Arial, Helvetica, sans-serif;
+}
