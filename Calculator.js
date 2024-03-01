@@ -6,7 +6,7 @@
 5. Add keyboard support - INCOMPLETE
 */
 
-
+//INITIALISATIONS
 const buttons = document.querySelectorAll('button');
 let displayVal = ""; //store text for display row
 displayVal.length = 8;
@@ -17,11 +17,9 @@ let opFlag = 0; // flag records operator action
 let opVal, lastDisp = ""; // records operator type
 const displayDiv = document.querySelector('.displayrow');
 
+// RUN CALCULATOR BUTTON LISTENERS AND RESPOND TO CLICKS
 function calcInput() {
-    // console.log('in calcInput...');
-    buttons.forEach((button) => {
-        // console.log('in loop...');
-        
+    buttons.forEach((button) => {       
         button.addEventListener('click', () => {
             console.log('PRESSED: '+button.innerText+' with name: '+button.className);
             //BACKSPACE BUTTON
@@ -52,7 +50,7 @@ function calcInput() {
                             num1 *= -1;
                         } else { //or positive
                             posNeg = 1;
-                            displayVal = displayVal.replace("-",""); //
+                            displayVal = displayVal.replace("-",""); 
                             num1 *= -1;
                         }
                         updateDisplay(displayVal);
@@ -66,7 +64,7 @@ function calcInput() {
                 // OPERATOR BUTTONS
                 } else if (button.className.includes("op")) {
                     dotSwitch(button);
-                    if (button.className.includes("op5")){ // if equals, evaluate and display
+                    if (button.className.includes("op5")){ // if '=' button, evaluate and display
                         console.log("opVal is: "+opVal+", Num1: "+num1+", Num2: "+num2);
                         displayVal = operate(opVal, num1, num2);
                         console.log(displayVal);
@@ -92,12 +90,10 @@ function calcInput() {
                         dotSwitch(button);
                         displayVal = button.innerText;
                         num1 = +displayVal;
-                        // butType = 1;
                     } else if (butType == 2) {
                         dotSwitch(button);
                         displayVal = button.innerText;
                         num2 = +displayVal;
-                        // butType = 1;
                     } else {
                         // if first instance, write to num1  
                         dotSwitch(button);      
@@ -115,23 +111,19 @@ function calcInput() {
                                 num2 = +displayVal;
                             }
                         }
-                        // butType = 1;
                     }
                     updateDisplay(displayVal);
                     butType = 1;
                 }
-            // isNum = (button.className.includes("num")) ? true : false;
             console.log('END: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);
             console.log('LastNum: '+lastNum1+', lastNum2: '+lastNum2+ ", lastDisp: " + lastDisp);
         }
         });
         button.addEventListener("mouseover", (event) => {
-            // console.log ("Moused-over: " + button.className);
             button.className = button.className + " playing";
         });
         
         button.addEventListener("mouseout", (event) => {
-            // console.log ("Moused-out: " + button.className);
             if (button.className.includes(" playing") ){
                 button.className = button.className.slice(0, (button.className.length - 8));
             }
@@ -139,6 +131,7 @@ function calcInput() {
     });
 }
 
+// stores previous button state (for backspace utility)
 function lastState (num1, num2, disp, opflag, posneg){
     lastNum1 = num1;
     lastNum2 = num2;
@@ -148,6 +141,7 @@ function lastState (num1, num2, disp, opflag, posneg){
     console.log('LAST STATE RECORDED AS: Num1: '+lastNum1+', Num2: '+lastNum2+ ', displayVal: '+lastDisp+ ', opFlag: ' + lastOpFlag+ ", posNeg:  "+ lastPosNeg);
 }
 
+// reverts to previous button state (for backspace utility)
 function reinstate () {
     num1 = lastNum1;
     num2 = lastNum2;
@@ -157,11 +151,13 @@ function reinstate () {
     console.log('REINSTATING: Num1: '+num1+', Num2: '+num2+ ', displayVal: '+displayVal+ ', opFlag: ' + opFlag+ ", posNeg:  "+ posNeg);
 }
 
+// refresh Display row
 function updateDisplay(num){
     let temp = +num;
     displayDiv.innerText = temp;
 }
 
+// disable/enable dot button, depending on if it has been pressed already.
 function dotSwitch (but) {
     if (but.className.includes("dot")){
         dotFlag = 1;
@@ -175,6 +171,7 @@ function dotSwitch (but) {
     }   
 }
  
+// CALCULATOR OPERATORS
 const add = function (num1, num2) {
     return result = num1+num2;
 }
@@ -195,6 +192,7 @@ const divide = function (num1, num2) {
     return result = num1/num2;
 }
 
+// EXECUTE MATH COMBINATION (i.e. two nums + operator)
 const operate = function (op, num1, num2){
     console.log(op);
     if (isNaN(num1) || isNaN (num2)){
