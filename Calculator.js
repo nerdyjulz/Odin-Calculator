@@ -11,7 +11,7 @@ const buttons = document.querySelectorAll('button');
 let displayVal = ""; //store text for display row
 displayVal.length = 8;
 let butType = 0; // flag records button type (3 = trans, 2 = op, 1 = num)
-let num1,num2,lastNum1, lastNum2, lastOpFlag, percentNum, stateStart = 0; //numbers store button values
+let num1,num2,lastNum1, lastNum2, lastOpFlag, lastButType, percentNum, stateStart = 0; //numbers store button values
 let posNeg = 1; // flag records positive/negative numbers
 let opFlag = 0; // flag records operator action
 let opVal, lastDisp = ""; // records operator type
@@ -31,7 +31,7 @@ function calcInput() {
                 if (stateStart === 0){
                     stateStart += 1;
                 } else {
-                    lastState(num1,num2,displayVal,opFlag,posNeg);
+                    lastState(num1,num2,displayVal,opFlag,posNeg,butType);
                 }
                 console.log('START: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);          
                 if (button.className.includes("trans")) { //Clear
@@ -132,13 +132,14 @@ function calcInput() {
 }
 
 // stores previous button state (for backspace utility)
-function lastState (num1, num2, disp, opflag, posneg){
+function lastState (num1, num2, disp, opflag, posneg, buttype){
     lastNum1 = num1;
     lastNum2 = num2;
     lastDisp = disp;
     lastOpFlag = opflag;
     lastPosNeg = posneg;
-    console.log('LAST STATE RECORDED AS: Num1: '+lastNum1+', Num2: '+lastNum2+ ', displayVal: '+lastDisp+ ', opFlag: ' + lastOpFlag+ ", posNeg:  "+ lastPosNeg);
+    lastButType = buttype;
+    console.log('LAST STATE RECORDED AS: Num1: '+lastNum1+', Num2: '+lastNum2+ ', displayVal: '+lastDisp+ ', opFlag: ' + lastOpFlag+ ", posNeg:  "+ lastPosNeg+", butType: "+lastButType);
 }
 
 // reverts to previous button state (for backspace utility)
@@ -148,7 +149,8 @@ function reinstate () {
     displayVal = lastDisp;
     opFlag = lastOpFlag;
     posNeg = lastPosNeg;
-    console.log('REINSTATING: Num1: '+num1+', Num2: '+num2+ ', displayVal: '+displayVal+ ', opFlag: ' + opFlag+ ", posNeg:  "+ posNeg);
+    butType = lastButType;
+    console.log('REINSTATING: Num1: '+num1+', Num2: '+num2+ ', displayVal: '+displayVal+ ', opFlag: ' + opFlag+ ", posNeg:  "+ posNeg+", butType: "+butType);
 }
 
 // refresh Display row
