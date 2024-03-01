@@ -1,105 +1,129 @@
-/*Outstanding tweaks
-1. fix display length to 10 characters.
+/*Extra Credit: 
+1. Fixed display length to 13 characters - DONE
+2. Disabled dot on single press - DONE
+3. Aligned bottom row correctly - DONE
+4. Add backspace button - DONE
+5. Add keyboard support - INCOMPLETE
 */
 
 
 const buttons = document.querySelectorAll('button');
 let displayVal = ""; //store text for display row
+displayVal.length = 8;
 let butType = 0; // flag records button type (3 = trans, 2 = op, 1 = num)
-let num1,num2,percentNum = 0; //numbers store button values
+let num1,num2,lastNum1, lastNum2, lastOpFlag, percentNum, stateStart = 0; //numbers store button values
 let posNeg = 1; // flag records positive/negative numbers
 let opFlag = 0; // flag records operator action
-let opVal = ""; // records operator type
+let opVal, lastDisp = ""; // records operator type
 const displayDiv = document.querySelector('.displayrow');
 
 function calcInput() {
     // console.log('in calcInput...');
     buttons.forEach((button) => {
         // console.log('in loop...');
+        
         button.addEventListener('click', () => {
-            console.log('START: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);
-            console.log('Pressed: '+button.innerText+' with name: '+button.className);
+            console.log('PRESSED: '+button.innerText+' with name: '+button.className);
+            //BACKSPACE BUTTON
+            if (button.className.includes("back")){
+                reinstate();
+                updateDisplay(displayVal);
             //TRANSFORM BUTTONS
-            if (button.className.includes("trans")) { //Clear
-                if (button.className.includes("trans1")) {
-                    displayVal = '0';
-                    num1 = 0;
-                    num2 = 0;
-                    opFlag = 0;
-                    updateDisplay(displayVal);
-                } else if (button.className.includes("trans2")) { //Plus-Minus
-                    //make negative
-                    if (posNeg == 1) {
-                        posNeg = 0;
-                        displayVal = "-" + displayVal;
-                        num1 *= -1;
-                    } else { //or positive
-                        posNeg = 1;
-                        displayVal = displayVal.replace("-",""); //
-                        num1 *= -1;
+            } else {
+                if (stateStart === 0){
+                    stateStart += 1;
+                } else {
+                    lastState(num1,num2,displayVal,opFlag,posNeg);
+                }
+                console.log('START: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);          
+                if (button.className.includes("trans")) { //Clear
+                    dotSwitch(button);
+                    if (button.className.includes("trans1")) {
+                        displayVal = '0';
+                        num1 = 0; //reset values
+                        num2 = 0;
+                        opFlag = 0;
+                        updateDisplay(displayVal);
+                    } else if (button.className.includes("trans2")) { //Plus-Minus
+                        //make negative
+                        if (posNeg == 1) {
+                            posNeg = 0;
+                            displayVal = "-" + displayVal;
+                            num1 *= -1;
+                        } else { //or positive
+                            posNeg = 1;
+                            displayVal = displayVal.replace("-",""); //
+                            num1 *= -1;
+                        }
+                        updateDisplay(displayVal);
+                    } else { //Percentage
+                        percentNum = displayVal / 100;
+                        displayVal = percentNum;
+                        num1 = percentNum;
+                        updateDisplay(displayVal);
                     }
-                    updateDisplay(displayVal);
-                } else { //Percentage
-                    percentNum = displayVal / 100;
-                    displayVal = percentNum;
-                    num1 = percentNum;
-                    updateDisplay(displayVal);
-                }
-                butType = 3;
-            // OPERATOR BUTTONS
-            } else if (button.className.includes("op")) {
-                if (button.className.includes("op5")){ // if equals, evaluate and display
-                    console.log("opVal is: "+opVal+", Num1: "+num1+", Num2: "+num2);
-                    displayVal = operate(opVal, num1, num2);
-                    updateDisplay (displayVal);
-                    num1 = +displayVal; //store latest result in Num1
-                    opFlag = 0;
-                } else {
-                    if (opFlag == 0) {
-                        // num1 = displayVal;
-                        opVal = button.innerText;
-                        opFlag = 1; 
-                    } else {
-                        opVal = button.innerText;
+                    butType = 3;
+                // OPERATOR BUTTONS
+                } else if (button.className.includes("op")) {
+                    dotSwitch(button);
+                    if (button.className.includes("op5")){ // if equals, evaluate and display
+                        console.log("opVal is: "+opVal+", Num1: "+num1+", Num2: "+num2);
                         displayVal = operate(opVal, num1, num2);
-                        num1 = +displayVal;
-                        // opFlag = 0;
-                    }            
-                    updateDisplay (displayVal);                
-                }
-                butType = 2;
-            } else { //NUMBER BUTTONS
-                if (butType == 3){
-                    displayVal = button.innerText;
-                    num1 = +displayVal;
-                    // butType = 1;
-                } else if (butType == 2) {
-                    displayVal = button.innerText;
-                    num2 = +displayVal;
-                    // butType = 1;
-                } else {
-                    // if first instance, write to num1        
-                    if (num1 === undefined) {  
-                        displayVal = displayVal+button.innerText;
-                        num1 = +displayVal;
+                        console.log(displayVal);
+                        updateDisplay (displayVal);
+                        num1 = +displayVal; //store latest result in Num1
+                        opFlag = 0;
                     } else {
-                        //and continue to add nums until the first operator
-                        if (opFlag === 0){
+                        if (opFlag == 0) {
+                            // num1 = displayVal;
+                            opVal = button.innerText;
+                            opFlag = 1; 
+                        } else {
+                            displayVal = operate(opVal, num1, num2);
+                            num1 = +displayVal;
+                            opVal = button.innerText;
+                            // opFlag = 0;
+                        }            
+                        updateDisplay (displayVal);                
+                    }
+                    butType = 2;
+                } else { //NUMBER BUTTONS
+                    if (butType == 3){
+                        dotSwitch(button);
+                        displayVal = button.innerText;
+                        num1 = +displayVal;
+                        // butType = 1;
+                    } else if (butType == 2) {
+                        dotSwitch(button);
+                        displayVal = button.innerText;
+                        num2 = +displayVal;
+                        // butType = 1;
+                    } else {
+                        // if first instance, write to num1  
+                        dotSwitch(button);      
+                        if (num1 === undefined) {  
                             displayVal = displayVal+button.innerText;
                             num1 = +displayVal;
-                        //otherwise, always write to num2
                         } else {
-                            displayVal = displayVal+button.innerText;
-                            num2 = +displayVal;
+                            //and continue to add nums until the first operator
+                            if (opFlag === 0){
+                                displayVal = displayVal+button.innerText;
+                                num1 = +displayVal;
+                            //otherwise, always write to num2
+                            } else {
+                                displayVal = displayVal+button.innerText;
+                                num2 = +displayVal;
+                            }
                         }
+                        // butType = 1;
                     }
-                    // butType = 1;
+                    updateDisplay(displayVal);
+                    butType = 1;
                 }
-                updateDisplay(displayVal);
-                butType = 1;
-            }
             // isNum = (button.className.includes("num")) ? true : false;
             console.log('END: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);
+            console.log('LastNum: '+lastNum1+', lastNum2: '+lastNum2+ ", lastDisp: " + lastDisp);
+        }
         });
         button.addEventListener("mouseover", (event) => {
             // console.log ("Moused-over: " + button.className);
@@ -115,8 +139,40 @@ function calcInput() {
     });
 }
 
+function lastState (num1, num2, disp, opflag, posneg){
+    lastNum1 = num1;
+    lastNum2 = num2;
+    lastDisp = disp;
+    lastOpFlag = opflag;
+    lastPosNeg = posneg;
+    console.log('LAST STATE RECORDED AS: Num1: '+lastNum1+', Num2: '+lastNum2+ ', displayVal: '+lastDisp+ ', opFlag: ' + lastOpFlag+ ", posNeg:  "+ lastPosNeg);
+}
+
+function reinstate () {
+    num1 = lastNum1;
+    num2 = lastNum2;
+    displayVal = lastDisp;
+    opFlag = lastOpFlag;
+    posNeg = lastPosNeg;
+    console.log('REINSTATING: Num1: '+num1+', Num2: '+num2+ ', displayVal: '+displayVal+ ', opFlag: ' + opFlag+ ", posNeg:  "+ posNeg);
+}
+
 function updateDisplay(num){
-    displayDiv.innerText = num;
+    let temp = +num;
+    displayDiv.innerText = temp;
+}
+
+function dotSwitch (but) {
+    if (but.className.includes("dot")){
+        dotFlag = 1;
+        if (dotFlag === 1) {
+            but.disabled = true;
+        }  
+    } else if (but.className.includes("op") || but.className.includes("trans1")){
+        buttons.forEach((button) => {
+            button.disabled = false;
+        });           
+    }   
 }
  
 const add = function (num1, num2) {
@@ -167,6 +223,10 @@ const operate = function (op, num1, num2){
             break;
         }
     }
+    let toNum = +result;
+    let shortner = toNum.toString();
+    result = shortner.substring(0, 13);
+    console.log('toNum:'+toNum + ' shortner: '+shortner+' result: '+result)
     return result;
 }
 
