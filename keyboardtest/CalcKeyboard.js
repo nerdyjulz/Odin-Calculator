@@ -124,11 +124,11 @@ function calcInput() {
         });
         //KEYBOARD INPUT
         // ISSUES REQUIRING RESOLUTION
-        // 1. Need to link keyboard input to button Id etc (consider new function)
+        // 1. keyboard working after mouse input, but not from start
         button.addEventListener('keydown', (event) => {
-            console.log('KEYPRESSED with value: '+event.key + ' and keyCode: ' + event.keyCode + ' and Button:' + button.innerText);
             let keyVal = event.key;
             let keyDiv = keyTable(keyVal);
+            console.log('KEYPRESSED with value: '+ keyVal + ' and keyDiv: ' + keyDiv);
                 // if (button.className.includes(keyDiv)){
                 //     butObj = button;
                 // }
@@ -148,7 +148,13 @@ function calcInput() {
                                     lastState(num1,num2,displayVal,opFlag,posNeg,butType);
                                 }
                                 console.log('START: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);  
-                                if (keyVal !== '/' || '*' || '-' || '+' || '=') { //NUMBER BUTTONS
+                                if ((keyVal !== '-') &&
+                                    (keyVal !== '*') &&
+                                    (keyVal !== '+') &&
+                                    (keyVal !== '/') &&
+                                    (keyVal !== '=') 
+                                    // keyVal !== '=')
+                                    ){ //NUMBER BUTTONS
                                     console.log ('in NUM function!');
                                     if (butType == 3){
                                         dotSwitch(button);
@@ -213,7 +219,7 @@ function calcInput() {
             }
             console.log('END: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);
             console.log('LastNum: '+lastNum1+', lastNum2: '+lastNum2+ ", lastDisp: " + lastDisp);
-            });
+        });
     
         //VISUAL BUTTON QUEUE
         button.addEventListener("mouseover", (event) => {
