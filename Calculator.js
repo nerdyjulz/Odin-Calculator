@@ -3,7 +3,7 @@
 2. Disabled dot on single press - DONE
 3. Aligned bottom row correctly - DONE
 4. Add backspace button - DONE
-5. Add keyboard support - INCOMPLETE
+5. Add keyboard support (numbers, then operators) - INCOMPLETE
 */
 
 //INITIALISATIONS
@@ -26,14 +26,15 @@ function calcInput() {
             if (button.className.includes("back")){
                 reinstate();
                 updateDisplay(displayVal);
-            //TRANSFORM BUTTONS
+            //RECORD STATE (supports Backspace)
             } else {
                 if (stateStart === 0){
                     stateStart += 1;
                 } else {
                     lastState(num1,num2,displayVal,opFlag,posNeg,butType);
                 }
-                console.log('START: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);          
+                // console.log('START: Num1: '+num1+', Num2: '+num2+ ", butType: " + butType + ' opFlag: ' +opFlag);  
+                //TRANSFORM BUTTONS        
                 if (button.className.includes("trans")) { //Clear
                     dotSwitch(button);
                     if (button.className.includes("trans1")) {
@@ -119,6 +120,7 @@ function calcInput() {
             console.log('LastNum: '+lastNum1+', lastNum2: '+lastNum2+ ", lastDisp: " + lastDisp);
         }
         });
+        //VISUAL BUTTON QUEUE
         button.addEventListener("mouseover", (event) => {
             button.className = button.className + " playing";
         });
