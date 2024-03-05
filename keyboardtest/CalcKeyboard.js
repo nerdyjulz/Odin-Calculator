@@ -3,8 +3,8 @@
 2. Disabled dot on single press - DONE
 3. Aligned bottom row correctly - DONE
 4. Add backspace button (for one instance) - DONE
-5. Add keyboard support (numbers, then operators) - INCOMPLETE
-6. Add backspace button (for many instance) - INCOMPLETE
+5. Add keyboard support (numbers, then operators) - DONE (need click-start fix)
+6. Add backspace button (for many instance) - DONE
 */
 
 //INITIALISATIONS54321
@@ -21,7 +21,8 @@ const displayDiv = document.querySelector('.displayrow');
 // RUN CALCULATOR BUTTON LISTENERS AND RESPOND TO CLICKS
 function calcInput() {
     //MOUSE CLICK INPUT
-    buttons.forEach((button) => {       
+    buttons.forEach((button) => {      
+        button.focus(); //sets HTMLelement focus (supports keyboard)
         button.addEventListener('click', () => {
             console.log('MOUSEPRESSED: '+button.innerText+' with name: '+button.className);
             //BACKSPACE BUTTON
@@ -123,8 +124,6 @@ function calcInput() {
         }
         });
         //KEYBOARD INPUT
-        // ISSUES REQUIRING RESOLUTION
-        // 1. keyboard working after mouse input, but not from start
         button.addEventListener('keydown', (event) => {
             let keyVal = event.key;
             let keyDiv = keyTable(keyVal);
@@ -221,7 +220,7 @@ function calcInput() {
             console.log('LastNum: '+lastNum1+', lastNum2: '+lastNum2+ ", lastDisp: " + lastDisp);
         });
     
-        //VISUAL BUTTON QUEUE
+        //VISUAL BUTTON QUEUE (supports mouse input)
         button.addEventListener("mouseover", (event) => {
             button.className = button.className + " playing";
         });
@@ -234,7 +233,7 @@ function calcInput() {
     });
 }
 
-// matches buttons to div names (for keyboard)
+// matches buttons to div names (supports keyboard input)
 function keyTable (key) {
     let translateTable = [
     ['Backspace', "but20-back"],
