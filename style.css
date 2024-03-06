@@ -20,7 +20,7 @@ body {
     display:flex;
     flex-direction: column;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 100%;
     min-height: 100vh; /*essential to make page large*/
 }
 
